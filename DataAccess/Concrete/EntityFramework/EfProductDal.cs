@@ -49,7 +49,6 @@ namespace DataAccess.Concrete.EntityFramework
 
         public void Update(Product entity)
         {
-
             using (NorthwindContext context = new NorthwindContext())
             {
                 var updatedEntity = context.Entry(entity);
