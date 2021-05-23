@@ -23,24 +23,18 @@ namespace Business.Concrete
         {
             if (product.ProductName.Length > 2)
             {
-                var result = _productDal.Add(product);
-                if (result.Success)
-                {
-                    return new ErrorResult(Messages.ProductAdded);
-                }
-                return new SuccessResult(Messages.ProductNotAdded);
+                _productDal.Add(product);
+
+                return new SuccessResult(Messages.ProductAdded);
             }
             return new ErrorResult(Messages.ProductNameInvalid);
         }
 
         public IResult Delete(Product product)
         {
-            var result = _productDal.Delete(product);
-            if (result.Success)
-            {
-                return new SuccessResult(Messages.ProductDeleted);
-            }
-            return new ErrorResult(Messages.ProductNotDeleted);
+            _productDal.Delete(product);
+            
+            return new SuccessResult(Messages.ProductDeleted);
         }
 
         public IDataResult<List<Product>> GetAll()
@@ -49,11 +43,11 @@ namespace Business.Concrete
             if (DateTime.Now.Hour != 14)
             {
                 var result = _productDal.GetAll();
-                if (result.Success)
+                if (result.Count > 0)
                 {
-                    return new SuccessDataResult<List<Product>>(result.Data, Messages.ProductListed);
+                    return new SuccessDataResult<List<Product>>(result, Messages.ProductListed);
                 }
-                return new ErrorDataResult<List<Product>>(result.Message);
+                return new ErrorDataResult<List<Product>>(Messages.ProductNotListed);
             }
             return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
         }
@@ -61,9 +55,9 @@ namespace Business.Concrete
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
         {
             var result = _productDal.GetAll(p => p.CategoryId == id);
-            if (result.Success)
+            if (result.Count > 0)
             {
-                return new SuccessDataResult<List<Product>>(result.Data, Messages.ProductListed);
+                return new SuccessDataResult<List<Product>>(result, Messages.ProductListed);
             }
             return new ErrorDataResult<List<Product>>(Messages.ProductNotListed);
         }
@@ -72,9 +66,9 @@ namespace Business.Concrete
         {
             var product = _productDal.Get(p => p.ProductID == id);
 
-            if (product.Success)
+            if (product != null)
             {
-                return new SuccessDataResult<Product>(product.Data, Messages.ProductListed);
+                return new SuccessDataResult<Product>(product, Messages.ProductListed);
             }
             return new ErrorDataResult<Product>(Messages.ProductNotListed);
         }
@@ -82,9 +76,9 @@ namespace Business.Concrete
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
             var result = _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max);
-            if (result.Success)
+            if (result.Count > 0)
             {
-                return new SuccessDataResult<List<Product>>(result.Data, Messages.GetByUnitPriceListed);
+                return new SuccessDataResult<List<Product>>(result, Messages.GetByUnitPriceListed);
             }
             return new ErrorDataResult<List<Product>>(Messages.GetByUnitPriceNotListed);
         }
@@ -100,12 +94,9 @@ namespace Business.Concrete
 
         public IResult Update(Product product)
         {
-            var result = _productDal.Update(product);
-            if (result.Success)
-            {
-                return new SuccessResult(Messages.ProductUpdated);
-            }
-            return new ErrorResult(Messages.ProductNotUpdated);
+            _productDal.Update(product);
+            
+            return new SuccessResult(Messages.ProductUpdated);
         }
     }
 }
