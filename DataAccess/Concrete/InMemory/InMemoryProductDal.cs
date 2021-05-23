@@ -1,4 +1,6 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess;
+using Core.Utilities.Results;
+using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -16,23 +18,35 @@ namespace DataAccess.Concrete.InMemory
         public InMemoryProductDal()
         {
         }
-        public void Add(Product product)
+        public bool Add(Product product)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
                 var addedEntity = context.Entry(product);
                 addedEntity.State = EntityState.Added;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
             }
         }
 
-        public void Delete(Product product)
+        public bool Delete(Product product)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
                 var deletedEntity = context.Entry(product);
                 deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
             }
         }
 
@@ -60,20 +74,62 @@ namespace DataAccess.Concrete.InMemory
             }
         }
 
-        public List<ProductDetailDto> GetProductDetails()
+
+        public IDataResult<ProductDetailDto> GetProductDetails(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Product product)
+        public IDataResult<List<ProductDetailDto>> GetProductsDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Product product)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
                 var updatedEntity = context.Entry(product);
                 updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
             }
 
+        }
+
+        IResult IEntityRepository<Product>.Add(Product entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        IResult IEntityRepository<Product>.Delete(Product entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<Product> IEntityRepository<Product>.Get(Expression<Func<Product, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<List<Product>> IEntityRepository<Product>.GetAll(Expression<Func<Product, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<ProductDetailDto> IProductDal.GetProductsDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        IResult IEntityRepository<Product>.Update(Product entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

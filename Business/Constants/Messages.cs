@@ -8,8 +8,27 @@ namespace Business.Constants
     public static class Messages
     {
         public static string ProductAdded = "Ürün eklendi.";
+        public static string ProductNotAdded = "Ürün eklenemedi.";
         public static string ProductNameInvalid = "Ürün ismi geçersizdir.";
-        internal static string MaintenanceTime = "Sistem bakımda";
-        internal static string PrductListed = "Ürünler listelendi.";
+        public static string MaintenanceTime = "Sistem bakımda";
+        public static string ProductListed = "Ürünler listelendi.";
+        public static string ProductNotListed = "Ürünler listelenemedi.";
+        public static string GetByUnitPriceListed = "Belirtilen birim fiyatı aralığındaki ürünler listelendi.";
+        public static string GetByUnitPriceNotListed = "Belirtilen birim fiyatı aralığındaki ürünler listelenemedi !";
+        public static string ProductUpdated = "Ürün güncellendi.";
+        public static string ProductNotUpdated = "Ürün güncellenemedi.";
+        public static string ProductDeleted = "Ürün silindi.";
+        public static string ProductNotDeleted = "Ürün silinemedi.";
+
+        public static string CategoryAdded = "Kategori eklendi.";
+        public static string CategoryNotAdded = "Kategori eklenemedi.";
+        public static string CategoryNameInvalid = "Kategori ismi geçersizdir.";
+        public static string CategoryListed = "Kategoriler listelendi.";
+        public static string CategoryNotListed = "Kategoriler listelenemedi.";
+        public static string CategoryUpdated = "Kategori güncellendi.";
+        public static string CategoryNotUpdated = "Kategori güncellenemedi.";
+        public static string CategoryDeleted = "Kategori silindi.";
+        public static string CategoryNotDeleted = "Kategori silinemedi.";
+
     }
 }

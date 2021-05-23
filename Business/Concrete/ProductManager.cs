@@ -21,35 +21,72 @@ namespace Business.Concrete
 
         public IResult Add(Product product)
         {
-            if (product.ProductName.Length < 2)
+            if (product.ProductName.Length > 2)
             {
-                return new ErrorResult(Messages.ProductNameInvalid);
+                var result = _productDal.Add(product);
+                if (result.Success)
+                {
+                    return new ErrorResult(Messages.ProductAdded);
+                }
+                return new SuccessResult(Messages.ProductNotAdded);
             }
-            _productDal.Add(product);
+            return new ErrorResult(Messages.ProductNameInvalid);
+        }
 
-            return new SuccessResult(Messages.ProductAdded);
+        public IResult Delete(Product product)
+        {
+            var result = _productDal.Delete(product);
+            if (result.Success)
+            {
+                return new SuccessResult(Messages.ProductDeleted);
+            }
+            return new ErrorResult(Messages.ProductNotDeleted);
         }
 
         public IDataResult<List<Product>> GetAll()
         {
             // İş Kodları
-            if (DateTime.Now.Hour == 17)
+            if (DateTime.Now.Hour != 14)
             {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
+                var result = _productDal.GetAll();
+                if (result.Success)
+                {
+                    return new SuccessDataResult<List<Product>>(result.Data, Messages.ProductListed);
+                }
+                return new ErrorDataResult<List<Product>>(result.Message);
             }
-
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.PrductListed);
-
+            return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
+            var result = _productDal.GetAll(p => p.CategoryId == id);
+            if (result.Success)
+            {
+                return new SuccessDataResult<List<Product>>(result.Data, Messages.ProductListed);
+            }
+            return new ErrorDataResult<List<Product>>(Messages.ProductNotListed);
+        }
+
+        public IDataResult<Product> GetById(int id)
+        {
+            var product = _productDal.Get(p => p.ProductID == id);
+
+            if (product.Success)
+            {
+                return new SuccessDataResult<Product>(product.Data, Messages.ProductListed);
+            }
+            return new ErrorDataResult<Product>(Messages.ProductNotListed);
         }
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max));
+            var result = _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max);
+            if (result.Success)
+            {
+                return new SuccessDataResult<List<Product>>(result.Data, Messages.GetByUnitPriceListed);
+            }
+            return new ErrorDataResult<List<Product>>(Messages.GetByUnitPriceNotListed);
         }
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
@@ -58,8 +95,17 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductsDetails(), Messages.ProductListed);
+        }
 
-            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
+        public IResult Update(Product product)
+        {
+            var result = _productDal.Update(product);
+            if (result.Success)
+            {
+                return new SuccessResult(Messages.ProductUpdated);
+            }
+            return new ErrorResult(Messages.ProductNotUpdated);
         }
     }
 }

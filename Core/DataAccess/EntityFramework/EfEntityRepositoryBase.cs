@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Utilities.Results;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,49 +13,90 @@ namespace Core.DataAccess.EntityFramework
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public void Add(TEntity entity)
+        public IResult Add(TEntity entity)
         {
             using (TContext context = new TContext())
             {
                 var addedEntity = context.Entry(entity);
                 addedEntity.State = EntityState.Added;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return new ErrorResult("Add() işlemi gerçekleştirilemedi");
+                }
+                return new SuccessResult("Add() işlemi başarıyla gerçekleştirildi.");
             }
         }
 
-        public void Delete(TEntity entity)
+        public IResult Delete(TEntity entity)
         {
             using (TContext context = new TContext())
             {
                 var deletedEntity = context.Entry(entity);
                 deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return new ErrorResult("Delete() işlemi gerçekleştirilemedi !");
+                }
+                return new SuccessResult("Delete() işlemi başarıyla gerçekleştirildi.");
             }
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
+        public IDataResult<TEntity> Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext context = new TContext())
             {
-                return context.Set<TEntity>().SingleOrDefault(filter);
+                var result = context.Set<TEntity>().SingleOrDefault(filter);
+                if (result == null)
+                {
+                    return new ErrorDataResult<TEntity>("Get() işlemi gerçekletirilemedi !");
+                }
+                return new SuccessDataResult<TEntity>(result, "Get() işlemi başarıyla gerçekleştirildi.");
             }
         }
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        public IDataResult<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
             using (TContext context = new TContext())
             {
-                return filter == null ? context.Set<TEntity>().ToList() : context.Set<TEntity>().Where(filter).ToList();
+                if (filter == null)
+                {
+                    var result = context.Set<TEntity>().ToList();
+                    if (result.Count > 0)
+                    {
+                        return new SuccessDataResult<List<TEntity>>(result, "GetAll() işlemi başarıyla gerçekleştirildi.");
+                    }
+                    return new ErrorDataResult<List<TEntity>>("GetAll() işlemi gerçekleştirilemedi !");
+                }
+                else
+                {
+                    var result = context.Set<TEntity>().Where(filter).ToList();
+
+                    if (result.Count > 0)
+                    {
+                        return new SuccessDataResult<List<TEntity>>(result, "GetAll(expression) işlemi başarıyla gerçekleştirildi.");
+                    }
+                    return new ErrorDataResult<List<TEntity>>("GetAll(expression) işlemi gerçekleştirilemedi !");
+                }
             }
         }
 
-        public void Update(TEntity entity)
+        public IResult Update(TEntity entity)
         {
             using (TContext context = new TContext())
             {
                 var updatedEntity = context.Entry(entity);
                 updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
+
+                int result = context.SaveChanges();
+                if (result == 0)
+                {
+                    return new ErrorResult("Update() işlemi gerçekleştirilemedi !");
+                }
+                return new SuccessResult("Update() işlemi başarıyla gerçekleştirildi.");
             }
         }
     }
