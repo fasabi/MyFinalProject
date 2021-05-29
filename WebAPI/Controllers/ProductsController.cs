@@ -54,9 +54,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbycategory")]
-        public IActionResult GetByCategory(int categoryId)
+        public IActionResult GetByCategory(int id)
         {
-            var result = _productService.GetAllByCategoryId(categoryId);
+            var result = _productService.GetAllByCategoryId(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -65,8 +65,8 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getproductdetails")]
-        public IActionResult GetProductDetails(int categoryId)
+        [HttpGet("getproductsdetails")]
+        public IActionResult GetProductsDetails()
         {
             var result = _productService.GetProductDetails();
             if (result.Success)

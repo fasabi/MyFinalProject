@@ -29,6 +29,9 @@ namespace Business.Constants
         public static string CategoryNotUpdated = "Kategori güncellenemedi.";
         public static string CategoryDeleted = "Kategori silindi.";
         public static string CategoryNotDeleted = "Kategori silinemedi.";
+        public static string ProductCountOfCategoryError = "Bir kategoride en fazla 10 ürün olabilir";
+        public static string ProductNameAlreadyExists = "Bu isimde zaten başka bir ürün var";
+        public static string CategoryLimitExceded = "Kategori limiti aşıldığı için yeni ürün eklenemiyor";
 
     }
 }

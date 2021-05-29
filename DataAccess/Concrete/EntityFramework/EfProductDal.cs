@@ -26,7 +26,8 @@ namespace DataAccess.Concrete.EntityFramework
                                  ProductId = p.ProductID,
                                  ProductName = p.ProductName,
                                  CategoryName = c.CategoryName,
-                                 UnitsInStock = p.UnitsInStock
+                                 UnitsInStock = p.UnitsInStock,
+                                 InitPrice = p.UnitPrice
                              };
                 return result.ToList();
             }
