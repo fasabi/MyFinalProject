@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
+        [Authorize(Roles = "Product.List")]
         public IActionResult GetAll()
         {
             var result = _productService.GetAll();
@@ -43,6 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "Product.Add")]
         public IActionResult Add(Product product)
         {
             var result = _productService.Add(product);
@@ -78,6 +81,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize(Roles = "Product.Update")]
         public IActionResult Update(Product product)
         {
             var result = _productService.Update(product);
@@ -89,6 +93,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
+        [Authorize(Roles = "Product.Delete")]
         public IActionResult Delete(Product product)
         {
             var result = _productService.Delete(product);
