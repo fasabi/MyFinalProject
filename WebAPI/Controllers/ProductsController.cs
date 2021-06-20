@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Caching;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +24,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize(Roles = "Product.List")]
+        //[Authorize(Roles = "product.list")]
         public IActionResult GetAll()
         {
             var result = _productService.GetAll();
@@ -45,7 +47,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        [Authorize(Roles = "Product.Add")]
+        [Authorize(Roles = "product.add")]
         public IActionResult Add(Product product)
         {
             var result = _productService.Add(product);
@@ -81,7 +83,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        [Authorize(Roles = "Product.Update")]
+        [Authorize(Roles = "product.update")]
         public IActionResult Update(Product product)
         {
             var result = _productService.Update(product);
@@ -93,7 +95,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
-        [Authorize(Roles = "Product.Delete")]
+        [Authorize(Roles = "product.delete")]
         public IActionResult Delete(Product product)
         {
             var result = _productService.Delete(product);
